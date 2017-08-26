@@ -30,16 +30,27 @@
     </ons-page>
   </template>
 
-  <template id="page2.html">
-      <ons-page id="page2">
+  <template id="register.html">
+    <ons-page id="register">
+      <ons-toolbar>
+        <div class="center">Refister</div>
+      </ons-toolbar>
+    </ons-page>
+  </template>
+
+  <template id="main.html">
+      <ons-page id="main">
         <ons-toolbar>
           <div class="left"><ons-back-button>Login</ons-back-button></div>
           <div class="center">Items Keeper</div>
         </ons-toolbar>
     
         <p>This is the main page of application.</p>
-      </ons-page>
-    </template>
+        <p style="margin-bottom: 30px;">
+          <ons-button id="logoutButton">logout</ons-button>
+        </p>
+    </ons-page>
+  </template>
 
   <script src="lib/onsenui/js/onsenui.min.js"></script>
   <script src="js/index.js"></script>

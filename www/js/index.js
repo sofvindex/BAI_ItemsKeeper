@@ -19,10 +19,8 @@
 var app = {
     // Application Constructor
     initialize: function() {
-        
-
         if(localStorage.getItem('user_token')){
-          document.querySelector('#myNavigator').setAttribute('page','page2.html');
+          document.querySelector('#myNavigator').setAttribute('page','main.html');
         }
         else{
           document.querySelector('#myNavigator').setAttribute('page','login.html');
@@ -66,16 +64,16 @@ app.initialize();
 document.addEventListener('init', function(event) {
   var page = event.target;  
  
-  //if(localStorage.getItem('user_token')){
-   // document.querySelector('#myNavigator').pushPage('page2.html', {data: {title: 'Page 2'}, animation: 'none'});    
-  //}
-  //else{
     if (page.id === 'login') {
       page.querySelector('#loginButton').onclick = function() {
         login();
-        // document.querySelector('#myNavigator').pushPage('page2.html', {data: {title: 'Page 2'}});
       };
-    } else if (page.id === 'page2') {
+    } else if (page.id === 'main') {
+
+      page.querySelector('#logoutButton').onclick = function() {
+        localStorage.removeItem('user_token');
+        document.querySelector('#myNavigator').replacePage('login.html');
+      }
       //2page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
      // page.querySelector('ons-toolbar .center').onclick = function(){
        // document.querySelector('#myNavigator').pushPage('login.html',{data: {tittle: 'Login'}});
@@ -88,7 +86,7 @@ document.addEventListener('init', function(event) {
 
 var checkToken = function(){
   if(localStorage.getItem('user_token')){
-    document.querySelector('#myNavigator').setAttribute('page','page2.html');
+    document.querySelector('#myNavigator').setAttribute('page','main.html');
   }
   else{
     document.querySelector('#myNavigator').setAttribute('page','login.html');
@@ -115,7 +113,7 @@ var login = function() {
         if(data.token){
           localStorage.setItem('user_token', data.token);          
           //document.querySelector('#myNavigator').pushPage('page2.html', {data: {title: 'Page 2'}});
-          document.querySelector('#myNavigator').replacePage('page2.html');
+          document.querySelector('#myNavigator').replacePage('main.html');
         }
         else{
           ons.notification.alert(data.error);
