@@ -33,8 +33,23 @@
   <template id="register.html">
     <ons-page id="register">
       <ons-toolbar>
-        <div class="center">Refister</div>
+        <div class="left"><ons-back-button>Back</ons-back-button></div>
+        <div class="center">Register</div>
       </ons-toolbar>
+      <div style="text-align: center; margin-top: 30px;">
+        <p>
+          <ons-input id="reg_username" modifier="underbar" placeholder="Username" float></ons-input>
+        </p>
+        <p>
+          <ons-input id="reg_password" modifier="underbar" type="password" placeholder="Password" float></ons-input>
+        </p>
+        <p>
+          <ons-input id="reg_confirm_password" modifier="underbar" type="password" placeholder="Confirm Password" float></ons-input>
+        </p>        
+        <p style="margin-top: 30px;">
+          <ons-button id="registerButton">Register</ons-button>
+        </p>
+      </div>
     </ons-page>
   </template>
 

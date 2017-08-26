@@ -68,38 +68,29 @@ document.addEventListener('init', function(event) {
       page.querySelector('#loginButton').onclick = function() {
         login();
       };
+      page.querySelector('#registerButton').onclick = function() {
+        document.querySelector('#myNavigator').pushPage('register.html');
+      };
     } else if (page.id === 'main') {
-
       page.querySelector('#logoutButton').onclick = function() {
         localStorage.removeItem('user_token');
         document.querySelector('#myNavigator').replacePage('login.html');
       }
-      //2page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
-     // page.querySelector('ons-toolbar .center').onclick = function(){
-       // document.querySelector('#myNavigator').pushPage('login.html',{data: {tittle: 'Login'}});
-      //}
-      
-      //document.querySelector('#myNavigator').pushPage('login.html',{data: {tittle: 'Login'}});
-   // }
-}
+    }else if(page.id === 'register'){
+      page.querySelector('#registerButton').onclick = function() {
+        register();
+      };
+      //page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
+    }
 });
 
-var checkToken = function(){
-  if(localStorage.getItem('user_token')){
-    document.querySelector('#myNavigator').setAttribute('page','main.html');
-  }
-  else{
-    document.querySelector('#myNavigator').setAttribute('page','login.html');
-  }
-  
-}
 
 var login = function() {
   var username = document.getElementById('username').value;
   var password = document.getElementById('password').value;
 
   $.ajax({
-    // 'url' : 'http://localhost:3306/api/v1/users/login',
+      // 'url' : 'http://localhost:3306/api/v1/users/login',
       'url' : 'http://blaszku.alwaysdata.net/api/v1/users/login',    
     
       'type' : 'POST',
@@ -129,7 +120,39 @@ var login = function() {
 };
 
 var register = function() {
-  var username = document.getElementById('username').value;
-  var password = document.getElementById('password').value;
+  var username = document.getElementById('reg_username').value;
+  var password = document.getElementById('reg_password').value;
+  var confirm_password = document.getElementById('reg_confirm_password').value;
+
+  if(password != confirm_password){
+    ons.notification.alert('Passwords are different');
+    document.getElementById('reg_username').value = '';    
+    document.getElementById('reg_password').value = '';
+    document.getElementById('reg_confirm_password').value = '';
+    
+  }
+  else{
+    $.ajax({    
+        // 'url' : 'http://localhost:3306/api/v1/users/add',  
+        'url' : 'http://blaszku.alwaysdata.net/api/v1/users/add',
+        'type' : 'POST',
+
+        'data' : {
+          'login' : username,
+          'password' : password
+        },
+      
+      'success': function(data){
+            ons.notification.alert(data.msg);
+            localStorage.setItem('user_token', data.token);
+            document.querySelector('#myNavigator').resetToPage('main.html');
+            // login();
+      },
+      'error': function(xhr, status, error){
+        var json = $.parseJSON(xhr.responseText);
+          ons.notification.alert(json.error);        
+      }
+    });
+  }
 }
 
