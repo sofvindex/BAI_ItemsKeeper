@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="onsen/css/onsenui.css">
+  <link rel="stylesheet" href="onsen/css/onsen-css-components.min.css">
+</head>
+<body>
+
+  <ons-navigator swipeable id="myNavigator"></ons-navigator>
+
+  <template id="login.html">
+    <ons-page id="login">
+      <ons-toolbar>
+        <div class="center">Login</div>
+      </ons-toolbar>
+      <div style="text-align: center; margin-top: 30px;">
+        <p>
+          <ons-input id="username" modifier="underbar" placeholder="Username" float></ons-input>
+        </p>
+        <p>
+          <ons-input id="password" modifier="underbar" type="password" placeholder="Password" float></ons-input>
+        </p>
+        <p style="margin-top: 30px;">
+          <ons-button id="loginButton">Log in</ons-button>
+        </p>
+        <p style="margin-top: 15px;">
+          <ons-button id="registerButton" onclick="register()">Register</ons-button>
+        </p>
+      </div>
+    </ons-page>
+  </template>
+
+  <template id="page2.html">
+      <ons-page id="page2">
+        <ons-toolbar>
+          <div class="left"><ons-back-button>Login</ons-back-button></div>
+          <div class="center">Items Keeper</div>
+        </ons-toolbar>
+    
+        <p>This is the main page of application.</p>
+      </ons-page>
+    </template>
+
+  <script src="onsen/js/onsenui.min.js"></script>
+  <script src="js/index.js"></script>
+  <script src="cordova.js"></script>
+  <script src="js/jquery-3.2.1.min.js"></script>
+</body>
+</html>
