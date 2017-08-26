@@ -18,7 +18,7 @@
     <platform name="android">
         <allow-intent href="market:*" />
         <!-- you can use any density that exists in the Android project -->
-        <splash src="res/screens/android/splash-land-hdpi.png" density="land-hdpi"/>
+        <!-- <splash src="res/screens/android/splash-land-hdpi.png" density="land-hdpi"/>
         <splash src="res/screens/android/splash-land-ldpi.png" density="land-ldpi"/>
         <splash src="res/screens/android/splash-land-mdpi.png" density="land-mdpi"/>
         <splash src="res/screens/android/splash-land-xhdpi.png" density="land-xhdpi"/>
@@ -26,7 +26,7 @@
         <splash src="res/screens/android/splash-land-hdpi.png" density="port-hdpi"/>
         <splash src="res/screens/android/splash-land-ldpi.png" density="port-ldpi"/>
         <splash src="res/screens/android/splash-land-mdpi.png" density="port-mdpi"/>
-        <splash src="res/screens/android/splash-land-xhdpi.png" density="port-xhdpi"/>
+        <splash src="res/screens/android/splash-land-xhdpi.png" density="port-xhdpi"/> -->
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />

@@ -20,7 +20,6 @@ var app = {
     // Application Constructor
     initialize: function() {
         
-        navigator.splashscreen.show();
         if(localStorage.getItem('user_token')){
           document.querySelector('#myNavigator').setAttribute('page','page2.html');
         }
