@@ -20,12 +20,18 @@
         <!-- you can use any density that exists in the Android project -->
     </platform>
 
-<splash src="screen-ldpi-portrait.png" platform="android" qualifier="ldpi" />
-<splash src="screen-mdpi-portrait.png" platform="android" qualifier="mdpi" />
-<splash src="screen-hdpi-portrait.png" platform="android" qualifier="hdpi" />
-<splash src="screen-xhdpi-portrait.png" platform="android" qualifier="xhdpi" />
-<splash src="screen-xxhdpi-portrait.png" platform="android" qualifier="port-xxhdpi" />
-<splash src="screen-xxhdpi-portrait.png" platform="android" qualifier="land-xxhdpi" />
+    <splash platform="android" qualifier="port-ldpi" src="res/screen/android/screen-ldpi-portrait.png" />
+    <splash platform="android" qualifier="port-mdpi" src="res/screen/android/screen-mdpi-portrait.png" />
+    <splash platform="android" qualifier="port-hdpi" src="res/screen/android/screen-hdpi-portrait.png" />
+    <splash platform="android" qualifier="port-xhdpi" src="res/screen/android/screen-xhdpi-portrait.png" />
+
+    <splash platform="android" qualifier="land-ldpi" src="res/screen/android/screen-ldpi-portrait.png" />
+    <splash platform="android" qualifier="land-mdpi" src="res/screen/android/screen-mdpi-portrait.png" />
+    <splash platform="android" qualifier="land-hdpi" src="res/screen/android/screen-hdpi-portrait.png" />
+    <splash platform="android" qualifier="land-xhdpi" src="res/screen/android/screen-xhdpi-portrait.png" />
+
+    <splash src="splash.png" />
+    <preference name="SplashScreenDelay" value="10000" />
 
     <platform name="ios">
         <allow-intent href="itms:*" />
