@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
   <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.min.css">
 </head>
+
 <body>
 
   <ons-navigator swipeable id="myNavigator"></ons-navigator>
@@ -24,7 +26,7 @@
           <ons-button id="loginButton">Log in</ons-button>
         </p>
         <p style="margin-top: 15px;">
-          <ons-button id="registerButton" onclick="register()">Register</ons-button>
+          <ons-button id="registerButton">Register</ons-button>
         </p>
       </div>
     </ons-page>
@@ -33,7 +35,9 @@
   <template id="register.html">
     <ons-page id="register">
       <ons-toolbar>
-        <div class="left"><ons-back-button>Back</ons-back-button></div>
+        <div class="left">
+          <ons-back-button>Back</ons-back-button>
+        </div>
         <div class="center">Register</div>
       </ons-toolbar>
       <div style="text-align: center; margin-top: 30px;">
@@ -45,7 +49,7 @@
         </p>
         <p>
           <ons-input id="reg_confirm_password" modifier="underbar" type="password" placeholder="Confirm Password" float></ons-input>
-        </p>        
+        </p>
         <p style="margin-top: 30px;">
           <ons-button id="registerButton">Register</ons-button>
         </p>
@@ -54,17 +58,61 @@
   </template>
 
   <template id="main.html">
-      <ons-page id="main">
-        <ons-toolbar>
-          <div class="left"><ons-back-button>Login</ons-back-button></div>
-          <div class="center">Items Keeper</div>
-        </ons-toolbar>
-    
-        <p>This is the main page of application.</p>
-        <p style="margin-bottom: 30px;">
-          <ons-button id="logoutButton">logout</ons-button>
-        </p>
+    <ons-page id="main">
+      <ons-toolbar>
+        <div class="left">
+          <ons-back-button>Login</ons-back-button>
+        </div>
+        <div class="center">Items Keeper</div>
+      </ons-toolbar>
+
+      <p>This is the main page of application.</p>
+      <p style="margin-bottom: 30px;">
+        <ons-button id="logoutButton">logout</ons-button>
+      </p>
+      <div>
+        <ons-speed-dial position="bottom right" direction="up">
+          <ons-fab>
+            <ons-icon icon="md-plus"></ons-icon>
+          </ons-fab>
+          <ons-speed-dial-item id="add_item">
+            <ons-icon icon="md-twitter"></ons-icon>
+          </ons-speed-dial-item>          
+          <ons-speed-dial-item>
+            <ons-icon icon="fa-usd"></ons-icon>
+          </ons-speed-dial-item>
+        </ons-speed-dial>
+      </div>
     </ons-page>
+  </template>
+
+  <template id="add.html">
+    <ons-page id="add">
+        <ons-toolbar>
+            <div class="left">
+                <ons-back-button></ons-back-button>
+            </div>
+            <div class="center">Add new item</div>
+          </ons-toolbar>
+          <div style="text-align: center; margin-top:20px">
+            <p><ons-input id="add_name" modifier="underbar" placeholder="name" float></ons-input></p>
+            <div>
+              <label class="radio-button radio-button--material">
+                <input type="radio" class="radio-button__input radio-button--material__input" name="r" checked="checked">
+                <div class="radio-button__checkmark radio-button--material__checkmark"></div>
+                From:
+              </label>
+              <label class="radio-button radio-button--material">
+                <input type="radio" class="radio-button__input radio-button--material__input" name="r">
+                <div class="radio-button__checkmark radio-button--material__checkmark"></div>
+                To:
+              </label>
+            </div>
+            <p><ons-input id="add_person" modifier="underbar" placeholder="person" float></ons-input></p>
+            <p><ons-input id="add_date" modifier="underbar" placeholder="date" float></ons-input></p>
+            <p><ons-button id="add_addButton">Add</ons-button></p>
+          </div>          
+    </ons-page>    
   </template>
 
   <script src="lib/onsenui/js/onsenui.min.js"></script>
@@ -72,4 +120,5 @@
   <script src="cordova.js"></script>
   <script src="js/jquery-3.2.1.min.js"></script>
 </body>
+
 </html>

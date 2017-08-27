@@ -67,57 +67,85 @@ document.addEventListener('init', function(event) {
     if (page.id === 'login') {
       page.querySelector('#loginButton').onclick = function() {
         login();
-      };
+      }
       page.querySelector('#registerButton').onclick = function() {
         document.querySelector('#myNavigator').pushPage('register.html');
-      };
+      }
     } else if (page.id === 'main') {
       page.querySelector('#logoutButton').onclick = function() {
         localStorage.removeItem('user_token');
         document.querySelector('#myNavigator').replacePage('login.html');
       }
-    }else if(page.id === 'register'){
+      page.querySelector('#add_item').onclick = function(){
+        document.querySelector('#myNavigator').pushPage('add.html');
+      }
+    }else if(page.id === 'register') {
       page.querySelector('#registerButton').onclick = function() {
         register();
-      };
-      //page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
+      }
+    }
+    else if (page.id === 'add') {
+      page.querySelector('#add_addButton').onclick = function(){
+        addItem();       
+      }
     }
 });
 
+  var addItem = function() {
+    var person = document.getElementById('add_person').value;
+    
+    $.ajax({
+      'url' : 'http://blaszku.alwaysdata.net/api/v1/borrows/add',
+      // 'url' : 'http://localhost:3306/api/v1/borrows/add',
+      'type' : 'POST',
+
+      'data' : {
+        'api_token' : localStorage.getItem('user_token'),
+        'person_name' : person        
+      },
+
+      'success' : function(){
+        ons.notification.alert('ok...');
+      },
+
+      'error' : function(){
+
+      }
+    });
+  }
 
 var login = function() {
   var username = document.getElementById('username').value;
   var password = document.getElementById('password').value;
 
-  $.ajax({
-      // 'url' : 'http://localhost:3306/api/v1/users/login',
-      'url' : 'http://blaszku.alwaysdata.net/api/v1/users/login',    
-    
-      'type' : 'POST',
-    
-      'data' : {
-        'login' : username,
-        'password' : password
+  if(username.length === 0 || password.length === 0){
+    ons.notification.alert('Username and password can not be empty.')
+  }else{
+    $.ajax({
+        // 'url' : 'http://localhost:3306/api/v1/users/login',
+        'url' : 'http://blaszku.alwaysdata.net/api/v1/users/login',    
+      
+        'type' : 'POST',
+      
+        'data' : {
+          'login' : username,
+          'password' : password
+        },
+      
+      'success': function(data){
+            localStorage.setItem('user_token', data.token);
+            document.querySelector('#myNavigator').replacePage('main.html');
       },
-    
-     'success': function(data){
-        if(data.token){
-          localStorage.setItem('user_token', data.token);          
-          //document.querySelector('#myNavigator').pushPage('page2.html', {data: {title: 'Page 2'}});
-          document.querySelector('#myNavigator').replacePage('main.html');
-        }
-        else{
-          ons.notification.alert(data.error);
-        }
-     },
-     'error': function(xhr, status, error){
-       var json = $.parseJSON(xhr.responseText);
+      'error': function(xhr, status, error){
+        var json = $.parseJSON(xhr.responseText);
 
-        ons.notification.alert(json.error);        
-     }
+          ons.notification.alert(json.error);        
+      }
 
-    });
+      });
+  }
 };
+
 
 var register = function() {
   var username = document.getElementById('reg_username').value;
@@ -125,11 +153,12 @@ var register = function() {
   var confirm_password = document.getElementById('reg_confirm_password').value;
 
   if(password != confirm_password){
-    ons.notification.alert('Passwords are different');
-    document.getElementById('reg_username').value = '';    
+    ons.notification.alert('Passwords are different');        
     document.getElementById('reg_password').value = '';
-    document.getElementById('reg_confirm_password').value = '';
-    
+    document.getElementById('reg_confirm_password').value = '';    
+  }
+  else if(username.length === 0 || password.length === 0){
+    ons.notification.alert('Username and password can not be empty.')
   }
   else{
     $.ajax({    
@@ -154,5 +183,5 @@ var register = function() {
       }
     });
   }
-}
+};
 
