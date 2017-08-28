@@ -66,7 +66,7 @@ document.addEventListener('init', function(event) {
  
     if (page.id === 'login') {
       page.querySelector('#loginButton').onclick = function() {
-        login();
+        login();        
       }
       page.querySelector('#registerButton').onclick = function() {
         document.querySelector('#myNavigator').pushPage('register.html');
@@ -86,17 +86,22 @@ document.addEventListener('init', function(event) {
     }
     else if (page.id === 'add') {
       page.querySelector('#add_addButton').onclick = function(){
-        addItem();       
+        addItem();          
       }
     }
 });
 
+
+
   var addItem = function() {
     var person = document.getElementById('add_person').value;
+    var item_name = document.getElementById('add_item').value;
+    var fromto
+    var date = today();
     
     $.ajax({
-      'url' : 'http://blaszku.alwaysdata.net/api/v1/borrows/add',
-      // 'url' : 'http://localhost:3306/api/v1/borrows/add',
+      // 'url' : 'http://blaszku.alwaysdata.net/api/v1/borrows/add',
+      'url' : 'http://localhost:3306/api/v1/borrows/add',
       'type' : 'POST',
 
       'data' : {
@@ -122,8 +127,8 @@ var login = function() {
     ons.notification.alert('Username and password can not be empty.')
   }else{
     $.ajax({
-        // 'url' : 'http://localhost:3306/api/v1/users/login',
-        'url' : 'http://blaszku.alwaysdata.net/api/v1/users/login',    
+        'url' : 'http://localhost:3306/api/v1/users/login',
+        // 'url' : 'http://blaszku.alwaysdata.net/api/v1/users/login',    
       
         'type' : 'POST',
       
@@ -162,8 +167,8 @@ var register = function() {
   }
   else{
     $.ajax({    
-        // 'url' : 'http://localhost:3306/api/v1/users/add',  
-        'url' : 'http://blaszku.alwaysdata.net/api/v1/users/add',
+        'url' : 'http://localhost:3306/api/v1/users/add',  
+        // 'url' : 'http://blaszku.alwaysdata.net/api/v1/users/add',
         'type' : 'POST',
 
         'data' : {
@@ -185,3 +190,20 @@ var register = function() {
   }
 };
 
+var today = function(){
+  var date = new Date();
+  var d = date.getDate();
+  var m = date.getMonth()+1; //January is 0!
+  var y = date.getFullYear();
+  
+  if(d<10) {
+      d = '0'+d;
+  } 
+  
+  if(m<10) {
+      m = '0'+m;
+  } 
+  
+  date = m + '/' + d + '/' + y;
+  return date;
+}
