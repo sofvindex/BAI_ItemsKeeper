@@ -86,8 +86,9 @@ document.addEventListener('init', function(event) {
     }
     else if (page.id === 'add') {
       page.querySelector('#add_addButton').onclick = function(){
-        addItem();          
+        addItem();        
       }
+      page.querySelector('#add_date').value = today();      
     }
 });
 
@@ -95,9 +96,13 @@ document.addEventListener('init', function(event) {
 
   var addItem = function() {
     var person = document.getElementById('add_person').value;
-    var item_name = document.getElementById('add_item').value;
-    var fromto
-    var date = today();
+    var itemName = document.getElementById('add_name').value;
+     
+    var borrowType = document.getElementById('add_borrowType').value;
+
+    var borrowDate = document.getElementById('add_date').value;
+    
+    
     
     $.ajax({
       // 'url' : 'http://blaszku.alwaysdata.net/api/v1/borrows/add',
@@ -106,15 +111,19 @@ document.addEventListener('init', function(event) {
 
       'data' : {
         'api_token' : localStorage.getItem('user_token'),
-        'person_name' : person        
+        'person_name' : person,
+        'item_name' : itemName,
+        'borrow_date' : borrowDate,
+        'borrow_type' : borrowType
       },
 
       'success' : function(){
-        ons.notification.alert('ok...');
+        ons.notification.alert('Misja zakonczona sukcesem');
       },
 
       'error' : function(){
-
+        var json = $.parseJSON(xhr.responseText);        
+        ons.notification.alert(json.error); 
       }
     });
   }
@@ -204,6 +213,6 @@ var today = function(){
       m = '0'+m;
   } 
   
-  date = m + '/' + d + '/' + y;
+  date = y + '/' + m + '/' + d;
   return date;
 }
