@@ -17,142 +17,159 @@
  * under the License.
  */
 var app = {
-    // Application Constructor
-    initialize: function() {
-        if(localStorage.getItem('user_token')){
-          document.querySelector('#myNavigator').setAttribute('page','main.html');
-        }
-        else{
-          document.querySelector('#myNavigator').setAttribute('page','login.html');
-        }
-        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-    },
+  // Application Constructor
+  initialize: function () {
+    if (localStorage.getItem('user_token')) {
+      document.querySelector('#myNavigator').setAttribute('page', 'main.html');
+    }
+    else {
+      document.querySelector('#myNavigator').setAttribute('page', 'login.html');
+    }
+    document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+  },
 
-    // deviceready Event Handler
-    //
-    // Bind any cordova events here. Common events are:
-    // 'pause', 'resume', etc.
-    onDeviceReady: function() {
-        this.receivedEvent('deviceready');
-        this.checkLocalStore();
+  // deviceready Event Handler
+  //
+  // Bind any cordova events here. Common events are:
+  // 'pause', 'resume', etc.
+  onDeviceReady: function () {
+    this.receivedEvent('deviceready');
+    this.checkLocalStore();
 
-    },
+  },
 
-    //Check localstorage
-    checkLocalStorage: function() {
-      if (typeof(Storage) == "undefined") {
-        alert('Error: cannot set up local storage');
-      }
-    },
+  //Check localstorage
+  checkLocalStorage: function () {
+    if (typeof (Storage) == "undefined") {
+      alert('Error: cannot set up local storage');
+    }
+  },
 
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
+  // Update DOM on a Received Event
+  receivedEvent: function (id) {
+    var parentElement = document.getElementById(id);
+    var listeningElement = parentElement.querySelector('.listening');
+    var receivedElement = parentElement.querySelector('.received');
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
+    listeningElement.setAttribute('style', 'display:none;');
+    receivedElement.setAttribute('style', 'display:block;');
 
-        console.log('Received Event: ' + id);
-    },
+    console.log('Received Event: ' + id);
+  },
 
 }
 
 app.initialize();
 
-document.addEventListener('init', function(event) {
-  var page = event.target;  
- 
-    if (page.id === 'login') {
-      page.querySelector('#loginButton').onclick = function() {
-        login();
-      };
-      page.querySelector('#registerButton').onclick = function() {
-        document.querySelector('#myNavigator').pushPage('register.html');
-      };
-    } else if (page.id === 'main') {
-      page.querySelector('#logoutButton').onclick = function() {
-        localStorage.removeItem('user_token');
-        document.querySelector('#myNavigator').replacePage('login.html');
-      }
-    }else if(page.id === 'register'){
-      page.querySelector('#registerButton').onclick = function() {
-        register();
-      };
-      //page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
+document.addEventListener('init', function (event) {
+  var page = event.target;
+
+  if (page.id === 'login') {
+    page.querySelector('#loginButton').onclick = function () {
+      login();
+    };
+    page.querySelector('#registerButton').onclick = function () {
+      document.querySelector('#myNavigator').pushPage('register.html');
+    };
+  } else if (page.id === 'main') {
+    page.querySelector('#logoutButton').onclick = function () {
+      localStorage.removeItem('user_token');
+      document.querySelector('#myNavigator').replacePage('login.html');
     }
+  } else if (page.id === 'register') {
+    page.querySelector('#registerButton').onclick = function () {
+      register();
+    };
+    //page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
+  }
 });
 
 
-var login = function() {
+var login = function () {
   var username = document.getElementById('username').value;
   var password = document.getElementById('password').value;
 
   $.ajax({
-      // 'url' : 'http://localhost:3306/api/v1/users/login',
-      'url' : 'http://blaszku.alwaysdata.net/api/v1/users/login',    
-    
-      'type' : 'POST',
-    
-      'data' : {
-        'login' : username,
-        'password' : password
-      },
-    
-     'success': function(data){
-        if(data.token){
-          localStorage.setItem('user_token', data.token);          
-          //document.querySelector('#myNavigator').pushPage('page2.html', {data: {title: 'Page 2'}});
-          document.querySelector('#myNavigator').replacePage('main.html');
-        }
-        else{
-          ons.notification.alert(data.error);
-        }
-     },
-     'error': function(xhr, status, error){
-       var json = $.parseJSON(xhr.responseText);
+    // 'url' : 'http://localhost:3306/api/v1/users/login',
+    'url': 'http://blaszku.alwaysdata.net/api/v1/users/login',
 
-        ons.notification.alert(json.error);        
-     }
+    'type': 'POST',
 
-    });
+    'data': {
+      'login': username,
+      'password': password
+    },
+
+    'success': function (data) {
+      if (data.token) {
+        localStorage.setItem('user_token', data.token);
+        //document.querySelector('#myNavigator').pushPage('page2.html', {data: {title: 'Page 2'}});
+        document.querySelector('#myNavigator').replacePage('main.html');
+      }
+      else {
+        ons.notification.alert(data.error);
+      }
+    },
+    'error': function (xhr, status, error) {
+      var json = $.parseJSON(xhr.responseText);
+
+      ons.notification.alert(json.error);
+    }
+
+  });
 };
 
-var register = function() {
+var register = function () {
   var username = document.getElementById('reg_username').value;
   var password = document.getElementById('reg_password').value;
   var confirm_password = document.getElementById('reg_confirm_password').value;
 
-  if(password != confirm_password){
+  if (password != confirm_password) {
     ons.notification.alert('Passwords are different');
-    document.getElementById('reg_username').value = '';    
+    document.getElementById('reg_username').value = '';
     document.getElementById('reg_password').value = '';
     document.getElementById('reg_confirm_password').value = '';
-    
-  }
-  else{
-    $.ajax({    
-        // 'url' : 'http://localhost:3306/api/v1/users/add',  
-        'url' : 'http://blaszku.alwaysdata.net/api/v1/users/add',
-        'type' : 'POST',
 
-        'data' : {
-          'login' : username,
-          'password' : password
-        },
-      
-      'success': function(data){
-            ons.notification.alert(data.msg);
-            localStorage.setItem('user_token', data.token);
-            document.querySelector('#myNavigator').resetToPage('main.html');
-            // login();
+  }
+  else {
+    $.ajax({
+      // 'url' : 'http://localhost:3306/api/v1/users/add',  
+      'url': 'http://blaszku.alwaysdata.net/api/v1/users/add',
+      'type': 'POST',
+
+      'data': {
+        'login': username,
+        'password': password
       },
-      'error': function(xhr, status, error){
+
+      'success': function (data) {
+        ons.notification.alert(data.msg);
+        localStorage.setItem('user_token', data.token);
+        document.querySelector('#myNavigator').resetToPage('main.html');
+        // login();
+      },
+      'error': function (xhr, status, error) {
         var json = $.parseJSON(xhr.responseText);
-          ons.notification.alert(json.error);        
+        ons.notification.alert(json.error);
       }
     });
   }
+}
+
+var date = function () {
+  var options = {
+    date: new Date(),
+    mode: 'date'
+  };
+
+  function onSuccess(date) {
+    alert('Selected date: ' + date);
+  }
+
+  function onError(error) { // Android only
+    alert('Error: ' + error);
+  }
+
+  datePicker.show(options, onSuccess, onError);
 }
 
