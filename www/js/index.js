@@ -68,9 +68,9 @@ document.addEventListener('init', function (event) {
     page.querySelector('#loginButton').onclick = function () {
       login();
     };
-    page.querySelector('#registerButton').onclick = function () {
-      document.querySelector('#myNavigator').pushPage('register.html');
-    };
+    // page.querySelector('#registerButton').onclick = function () {
+      // document.querySelector('#myNavigator').pushPage('register.html');
+    // };
   } else if (page.id === 'main') {
     page.querySelector('#logoutButton').onclick = function () {
       localStorage.removeItem('user_token');
