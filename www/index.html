@@ -70,6 +70,9 @@
       <p style="margin-bottom: 30px;">
         <ons-button id="logoutButton">logout</ons-button>
       </p>
+      <p>
+        <ons-button id="showButton">Show</ons-button>
+      </p>
       <div>
         <ons-speed-dial position="bottom right" direction="up">
           <ons-fab>
@@ -101,7 +104,7 @@
         <p>
           <ons-select id="add_borrowType">
             <option value="borrow">To:</option>
-            <option value="lend">From:</option>            
+            <option value="lend">From:</option>
           </ons-select>
         </p>
         <!-- <div>
@@ -127,6 +130,20 @@
           <ons-button id="add_addButton">Add</ons-button>
         </p>
       </div>
+    </ons-page>
+  </template>
+
+  <template id="borrows.html">
+    <ons-page id="borrows">
+      <ons-toolbar>
+        <div class="left">
+          <ons-back-button></ons-back-button>
+        </div>
+        <div class="center">Borrows</div>
+      </ons-toolbar>
+      <ons-list id="borrowList">
+
+      </ons-list>
     </ons-page>
   </template>
 

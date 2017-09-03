@@ -79,6 +79,12 @@ document.addEventListener('init', function(event) {
       page.querySelector('#add_item').onclick = function(){
         document.querySelector('#myNavigator').pushPage('add.html');
       }
+
+      page.querySelector('#showButton').onclick = function(){
+        //document.querySelector('#myNavigator').pushPage('borrows.html')
+        getAll();
+      }
+
     }else if(page.id === 'register') {
       page.querySelector('#registerButton').onclick = function() {
         register();
@@ -90,9 +96,40 @@ document.addEventListener('init', function(event) {
       }
       page.querySelector('#add_date').value = today();      
     }
+    else if (page.id ==='borrows'){
+        page.querySelector('#borrowList').innerHTML = getAll();
+    }
 });
 
 
+  var getAll = function(){
+
+    var token = localStorage.getItem('user_token');
+    $.ajax({
+      url : 'http://localhost:3306/api/v1/borrows/get/all',
+      // 'url' : 'http://blaszku.alwaysdata.net/api/v1/users/login',    
+    
+      type : 'GET',
+      
+      // beforeSend : function(xhr){xhr.setRequestHeader('api_token', token);},
+
+      headers : {
+        'api_token' : token
+      },
+    
+    success : function(data){
+          ons.notification.alert('Tym razem ci sie udalo');
+    },
+    error : function(xhr, status, error){
+      // var json = $.parseJSON(xhr.responseText);
+
+        ons.notification.alert("Chyba masz problem");        
+    }
+
+    });
+    // var txt = "<ons-list-item>Item</ons-list-item> <br> <ons-list-item>Item</ons-list-item>"
+    // return txt;
+  }
 
   var addItem = function() {
     var person = document.getElementById('add_person').value;
@@ -121,9 +158,10 @@ document.addEventListener('init', function(event) {
         ons.notification.alert('Misja zakonczona sukcesem');
       },
 
-      'error' : function(){
-        var json = $.parseJSON(xhr.responseText);        
-        ons.notification.alert(json.error); 
+      'error': function(xhr, status, error){
+        var json = $.parseJSON(xhr.responseText);
+
+          ons.notification.alert(json);
       }
     });
   }
