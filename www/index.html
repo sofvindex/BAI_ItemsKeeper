@@ -97,7 +97,7 @@
         </div>
         <div class="center">Add new item</div>
       </ons-toolbar>
-      <div style="text-align: center; margin-top:20px">
+      <div style="margin-left:20%; margin-top:20px">
         <p>
           <ons-input id="add_name" modifier="underbar" placeholder="name" float></ons-input>
         </p>
@@ -107,19 +107,6 @@
             <option value="lend">From:</option>
           </ons-select>
         </p>
-        <!-- <div>
-              <label class="radio-button radio-button--material">
-                <input type="radio" class="radio-button__input radio-button--material__input" name="r" checked="checked">
-                <div class="radio-button__checkmark radio-button--material__checkmark"></div>
-                From:
-              </label>
-              <label class="radio-button radio-button--material">
-                <input type="radio" class="radio-button__input radio-button--material__input" name="r">
-                <div class="radio-button__checkmark radio-button--material__checkmark"></div>
-                To:
-              </label>
-            </div> -->
-
         <p>
           <ons-input id="add_person" modifier="underbar" placeholder="person" float></ons-input>
         </p>
@@ -133,17 +120,58 @@
     </ons-page>
   </template>
 
-  <template id="borrows.html">
-    <ons-page id="borrows">
+  <template id="tapBar.html">
+    <ons-page id="tapBar">
       <ons-toolbar>
         <div class="left">
           <ons-back-button></ons-back-button>
         </div>
-        <div class="center">Borrows</div>
+        <div class="center">Items</div>
+        <div class="right">
+          <ons-toolbar-button>
+            <ons-icon icon="fa-filter"></ons-icon>
+          </ons-toolbar-button>
+        </div>
       </ons-toolbar>
+
+      <ons-tabbar position="auto">
+        <ons-tab page="borrows.html" label="Borrows" active>
+        </ons-tab>
+        <ons-tab page="lends.html" label="Lends">
+        </ons-tab>
+      </ons-tabbar>
+    </ons-page>
+  </template>
+
+  <template id="borrows.html">
+    <ons-page id="borrows">
+      <!-- <ons-toolbar>
+        <div class="left">
+          <ons-back-button></ons-back-button>
+        </div>
+        <div class="center">Borrows</div>
+      </ons-toolbar> -->
+
       <ons-list id="borrowList">
 
       </ons-list>
+
+    </ons-page>
+  </template>
+
+  <template id="lends.html">
+    <ons-page id="lends">
+      <!-- <ons-toolbar>
+        <div class="left">
+          <ons-back-button></ons-back-button>
+        </div>
+        <div class="center">Borrows</div>
+      </ons-toolbar> -->
+
+      <ons-list id="lendList">
+
+      </ons-list>
+
     </ons-page>
   </template>
 

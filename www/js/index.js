@@ -17,240 +17,254 @@
  * under the License.
  */
 var app = {
-    // Application Constructor
-    initialize: function() {
-        if(localStorage.getItem('user_token')){
-          document.querySelector('#myNavigator').setAttribute('page','main.html');
-        }
-        else{
-          document.querySelector('#myNavigator').setAttribute('page','login.html');
-        }
-        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-    },
+  // Application Constructor
+  initialize: function () {
+    if (localStorage.getItem('user_token')) {
+      document.querySelector('#myNavigator').setAttribute('page', 'main.html');
+    }
+    else {
+      document.querySelector('#myNavigator').setAttribute('page', 'login.html');
+    }
+    document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+  },
 
-    // deviceready Event Handler
-    //
-    // Bind any cordova events here. Common events are:
-    // 'pause', 'resume', etc.
-    onDeviceReady: function() {
-        this.receivedEvent('deviceready');
-        this.checkLocalStore();
+  // deviceready Event Handler
+  //
+  // Bind any cordova events here. Common events are:
+  // 'pause', 'resume', etc.
+  onDeviceReady: function () {
+    this.receivedEvent('deviceready');
+    this.checkLocalStore();
 
-    },
+  },
 
-    //Check localstorage
-    checkLocalStorage: function() {
-      if (typeof(Storage) == "undefined") {
-        alert('Error: cannot set up local storage');
-      }
-    },
+  //Check localstorage
+  checkLocalStorage: function () {
+    if (typeof (Storage) == "undefined") {
+      alert('Error: cannot set up local storage');
+    }
+  },
 
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
+  // Update DOM on a Received Event
+  receivedEvent: function (id) {
+    var parentElement = document.getElementById(id);
+    var listeningElement = parentElement.querySelector('.listening');
+    var receivedElement = parentElement.querySelector('.received');
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
+    listeningElement.setAttribute('style', 'display:none;');
+    receivedElement.setAttribute('style', 'display:block;');
 
-        console.log('Received Event: ' + id);
-    },
+    console.log('Received Event: ' + id);
+  },
 
 }
 
 app.initialize();
 
-document.addEventListener('init', function(event) {
-  var page = event.target;  
- 
-    if (page.id === 'login') {
-      page.querySelector('#loginButton').onclick = function() {
-        login();        
-      }
-      page.querySelector('#registerButton').onclick = function() {
-        document.querySelector('#myNavigator').pushPage('register.html');
-      }
-    } else if (page.id === 'main') {
-      page.querySelector('#logoutButton').onclick = function() {
-        localStorage.removeItem('user_token');
-        document.querySelector('#myNavigator').replacePage('login.html');
-      }
-      page.querySelector('#add_item').onclick = function(){
-        document.querySelector('#myNavigator').pushPage('add.html');
-      }
+document.addEventListener('init', function (event) {
+  var page = event.target;
 
-      page.querySelector('#showButton').onclick = function(){
-        //document.querySelector('#myNavigator').pushPage('borrows.html')
-        getAll();
-      }
+  if (page.id === 'login') {
+    page.querySelector('#loginButton').onclick = function () {
+      login();
+    }
+    page.querySelector('#registerButton').onclick = function () {
+      document.querySelector('#myNavigator').pushPage('register.html');
+    }
+  } else if (page.id === 'main') {
+    page.querySelector('#logoutButton').onclick = function () {
+      localStorage.removeItem('user_token');
+      document.querySelector('#myNavigator').replacePage('login.html');
+    }
+    page.querySelector('#add_item').onclick = function () {
+      document.querySelector('#myNavigator').pushPage('add.html');
+    }
 
-    }else if(page.id === 'register') {
-      page.querySelector('#registerButton').onclick = function() {
-        register();
-      }
+    page.querySelector('#showButton').onclick = function () {
+      document.querySelector('#myNavigator').pushPage('tapBar.html');
+      getAll();      
     }
-    else if (page.id === 'add') {
-      page.querySelector('#add_addButton').onclick = function(){
-        addItem();        
-      }
-      page.querySelector('#add_date').value = today();      
+
+  } else if (page.id === 'register') {
+    page.querySelector('#registerButton').onclick = function () {
+      register();
     }
-    else if (page.id ==='borrows'){
-        page.querySelector('#borrowList').innerHTML = getAll();
+  }
+  else if (page.id === 'add') {
+    page.querySelector('#add_addButton').onclick = function () {
+      addItem();
     }
+    page.querySelector('#add_date').value = today();
+  }
+  else if (page.id === 'borrows') {    
+  }
 });
 
 
-  var getAll = function(){
+var getAll = function () {
 
-    var token = localStorage.getItem('user_token');
-    $.ajax({
-      url : 'http://localhost:3306/api/v1/borrows/get/all',
-      // 'url' : 'http://blaszku.alwaysdata.net/api/v1/users/login',    
-    
-      type : 'GET',
-      
-      // beforeSend : function(xhr){xhr.setRequestHeader('api_token', token);},
+  var token = localStorage.getItem('user_token');
+  var txt;
+  $.ajax({
+    url: 'http://localhost:3306/api/v1/borrows/get/all',
+    // 'url' : 'http://blaszku.alwaysdata.net/api/v1/users/login',    
 
-      headers : {
-        'api_token' : token
-      },
-    
-    success : function(data){
-          ons.notification.alert('Tym razem ci sie udalo');
+    type: 'GET',
+
+    headers : {
+      'api_token' : token
     },
-    error : function(xhr, status, error){
-      // var json = $.parseJSON(xhr.responseText);
+    
+    success: function (data) {           
+      printBorrows(data);      
+      sessionStorage.setItem('borrows',JSON.stringify(data));      
+    },
+    
+    error: function (xhr, status, error) {
+      ons.notification.alert("Chyba masz problem");
+    },
+  });
+}
 
-        ons.notification.alert("Chyba masz problem");        
+var printBorrows = function (data) {
+  var borrow = "";
+  var lend = "";
+  for (i = 0; i < data.length; i++) {
+    item =
+      "<ons-list-item modifier=\"longdivider\">" +
+      "<div>" +
+      data[i].item_name + "<br>" +
+      data[i].person_name + "<br>" +
+      data[i].borrow_date.toString() +
+      "</div>" +
+      "</ons-list-item>";
+    if(data[i].borrow_type === 'borrow'){
+      borrow += item;
     }
-
-    });
-    // var txt = "<ons-list-item>Item</ons-list-item> <br> <ons-list-item>Item</ons-list-item>"
-    // return txt;
+    if(data[i].borrow_type === 'lend'){
+      lend += item;
+    }
   }
+  document.getElementById('borrowList').innerHTML = borrow;
+  document.getElementById('lendList').innerHTML = lend;
+}
 
-  var addItem = function() {
-    var person = document.getElementById('add_person').value;
-    var itemName = document.getElementById('add_name').value;
-     
-    var borrowType = document.getElementById('add_borrowType').value;
+var addItem = function () {
+  var person = document.getElementById('add_person').value;
+  var itemName = document.getElementById('add_name').value;
+  var borrowType = document.getElementById('add_borrowType').value;
+  var borrowDate = document.getElementById('add_date').value;
 
-    var borrowDate = document.getElementById('add_date').value;
-    
-    
-    
-    $.ajax({
-      // 'url' : 'http://blaszku.alwaysdata.net/api/v1/borrows/add',
-      'url' : 'http://localhost:3306/api/v1/borrows/add',
-      'type' : 'POST',
+  $.ajax({
+    // 'url' : 'http://blaszku.alwaysdata.net/api/v1/borrows/add',
+    'url': 'http://localhost:3306/api/v1/borrows/add',
+    'type': 'POST',
 
-      'data' : {
-        'api_token' : localStorage.getItem('user_token'),
-        'person_name' : person,
-        'item_name' : itemName,
-        'borrow_date' : borrowDate,
-        'borrow_type' : borrowType
-      },
+    'data': {
+      'api_token': localStorage.getItem('user_token'),
+      'person_name': person,
+      'item_name': itemName,
+      'borrow_date': borrowDate,
+      'borrow_type': borrowType
+    },
 
-      'success' : function(){
-        ons.notification.alert('Misja zakonczona sukcesem');
-      },
+    'success': function () {
+      ons.notification.alert('Misja zakonczona sukcesem');
+    },
 
-      'error': function(xhr, status, error){
-        var json = $.parseJSON(xhr.responseText);
+    'error': function (xhr, status, error) {
+      var json = $.parseJSON(xhr.responseText);
 
-          ons.notification.alert(json);
-      }
-    });
-  }
+      ons.notification.alert(json);
+    }
+  });
+}
 
-var login = function() {
+var login = function () {
   var username = document.getElementById('username').value;
   var password = document.getElementById('password').value;
 
-  if(username.length === 0 || password.length === 0){
+  if (username.length === 0 || password.length === 0) {
     ons.notification.alert('Username and password can not be empty.')
-  }else{
+  } else {
     $.ajax({
-        'url' : 'http://localhost:3306/api/v1/users/login',
-        // 'url' : 'http://blaszku.alwaysdata.net/api/v1/users/login',    
-      
-        'type' : 'POST',
-      
-        'data' : {
-          'login' : username,
-          'password' : password
-        },
-      
-      'success': function(data){
-            localStorage.setItem('user_token', data.token);
-            document.querySelector('#myNavigator').replacePage('main.html');
+      'url': 'http://localhost:3306/api/v1/users/login',
+      // 'url' : 'http://blaszku.alwaysdata.net/api/v1/users/login',    
+
+      'type': 'POST',
+
+      'data': {
+        'login': username,
+        'password': password
       },
-      'error': function(xhr, status, error){
+
+      'success': function (data) {
+        localStorage.setItem('user_token', data.token);
+        document.querySelector('#myNavigator').replacePage('main.html');
+      },
+      'error': function (xhr, status, error) {
         var json = $.parseJSON(xhr.responseText);
 
-          ons.notification.alert(json.error);        
+        ons.notification.alert(json.error);
       }
 
-      });
+    });
   }
 };
 
 
-var register = function() {
+var register = function () {
   var username = document.getElementById('reg_username').value;
   var password = document.getElementById('reg_password').value;
   var confirm_password = document.getElementById('reg_confirm_password').value;
 
-  if(password != confirm_password){
-    ons.notification.alert('Passwords are different');        
+  if (password != confirm_password) {
+    ons.notification.alert('Passwords are different');
     document.getElementById('reg_password').value = '';
-    document.getElementById('reg_confirm_password').value = '';    
+    document.getElementById('reg_confirm_password').value = '';
   }
-  else if(username.length === 0 || password.length === 0){
+  else if (username.length === 0 || password.length === 0) {
     ons.notification.alert('Username and password can not be empty.')
   }
-  else{
-    $.ajax({    
-        'url' : 'http://localhost:3306/api/v1/users/add',  
-        // 'url' : 'http://blaszku.alwaysdata.net/api/v1/users/add',
-        'type' : 'POST',
+  else {
+    $.ajax({
+      'url': 'http://localhost:3306/api/v1/users/add',
+      // 'url' : 'http://blaszku.alwaysdata.net/api/v1/users/add',
+      'type': 'POST',
 
-        'data' : {
-          'login' : username,
-          'password' : password
-        },
-      
-      'success': function(data){
-            ons.notification.alert(data.msg);
-            localStorage.setItem('user_token', data.token);
-            document.querySelector('#myNavigator').resetToPage('main.html');
-            // login();
+      'data': {
+        'login': username,
+        'password': password
       },
-      'error': function(xhr, status, error){
+
+      'success': function (data) {
+        ons.notification.alert(data.msg);
+        localStorage.setItem('user_token', data.token);
+        document.querySelector('#myNavigator').resetToPage('main.html');
+        // login();
+      },
+      'error': function (xhr, status, error) {
         var json = $.parseJSON(xhr.responseText);
-          ons.notification.alert(json.error);        
+        ons.notification.alert(json.error);
       }
     });
   }
 };
 
-var today = function(){
+var today = function () {
   var date = new Date();
   var d = date.getDate();
-  var m = date.getMonth()+1; //January is 0!
+  var m = date.getMonth() + 1; //January is 0!
   var y = date.getFullYear();
-  
-  if(d<10) {
-      d = '0'+d;
-  } 
-  
-  if(m<10) {
-      m = '0'+m;
-  } 
-  
+
+  if (d < 10) {
+    d = '0' + d;
+  }
+
+  if (m < 10) {
+    m = '0' + m;
+  }
+
   date = y + '/' + m + '/' + d;
   return date;
 }
