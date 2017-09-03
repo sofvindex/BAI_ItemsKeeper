@@ -120,9 +120,11 @@ var getAll = function () {
       sessionStorage.setItem('borrows',JSON.stringify(data));      
     },
     
-    error: function (xhr, status, error) {
-      ons.notification.alert("Chyba masz problem");
-    },
+    'error': function (xhr, status, error) {
+      var json = $.parseJSON(xhr.responseText);
+
+      ons.notification.alert(json);
+    }
   });
 }
 
